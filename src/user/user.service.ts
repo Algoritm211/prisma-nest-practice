@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Post, Prisma, User } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -18,5 +18,15 @@ export class UserService {
     return this.prisma.user.create({
       data,
     });
+  }
+
+  async getPosts(data: Prisma.UserWhereUniqueInput): Promise<Array<Post>> {
+    const posts = await this.prisma.post.findMany({
+      where: {
+        authorId: data.id,
+      },
+    });
+
+    return posts;
   }
 }
