@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { createPostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 
@@ -15,6 +15,19 @@ export class PostController {
       author: {
         connect: { email: authorEmail },
       },
+    });
+  }
+
+  @Get(':id')
+  async getPostById(@Param('id') id: string) {
+    return this.postService.post({ id: +id });
+  }
+
+  @Put('publish/:id')
+  async publish(@Param('id') id: string) {
+    return this.postService.updatePost({
+      where: { id: +id },
+      data: { published: true },
     });
   }
 }
